@@ -8,7 +8,7 @@
     <!--Environment.getExternalStorageDirectory()-->
     <external-path
         name="external_root"
-        path="cpx/" />
+        path="sspicture/" />
 
     <!-- getExternalFilesDir() /storage/sdcard0/Android/data/packagename -->
     <external-files-path
