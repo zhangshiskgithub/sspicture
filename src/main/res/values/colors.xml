@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--标题背景颜色-->
+    <color name="title_background_color">#58a4f8</color>
+    <!--页面背景颜色-->
+    <color name="page_background_color">#58a4f8</color>
+    <!--grid中item的背景颜色-->
+    <color name="grid_item_bg">#343434</color>
+    <!--文件夹名称颜色-->
+    <color name="folder_name_color">#343434</color>
+    <!--文件夹图片数量颜色-->
+    <color name="folder_image_num_color">#777777</color>
+</resources>

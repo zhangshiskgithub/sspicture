@@ -1,0 +1,41 @@
+<manifest package="com.cpx.sspicture"
+
+          xmlns:android="http://schemas.android.com/apk/res/android"
+>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:supportsRtl="true">
+        <activity
+            android:name=".SelectPictureActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SelectPictureActivityNew"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SelectPictureDispatchActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".DisplayPictureActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".CropImageActivity"
+            android:screenOrientation="portrait"/>
+        <!-- FileProvider
+         grantUriPermissions：必须是true，表示授予 URI 临时访问权限
+         exported：必须是false
+        -->
+        <!--<provider-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:authorities="com.cpx.sspicture.fileprovider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/file_paths"/>-->
+        <!--</provider>-->
+    </application>
+
+</manifest>

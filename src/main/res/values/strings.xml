@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SSPicture</string>
+    <string name="select_pic_title">选择图片</string>
+    <string name="select_pic_title_back">返回</string>
+    <string name="display_pic_title_center">查看图片</string>
+    <string name="select_pic_title_select">确定</string>
+    <string name="all_image_bucket_name">图片</string>
+    <string name="all_image_bucket_id">allImg</string>
+    <string name="request_read_external_storage_permission">需要访问您的外部存储器</string>
+    <string name="request_camera_permission">需要访问您的摄像头</string>
+</resources>

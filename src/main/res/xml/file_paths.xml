@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--Context.getFilesDir() /data/data -->
+    <files-path
+        name="internal_files_root"
+        path="." />
+
+    <!--Environment.getExternalStorageDirectory()-->
+    <external-path
+        name="external_root"
+        path="cpx/" />
+
+    <!-- getExternalFilesDir() /storage/sdcard0/Android/data/packagename -->
+    <external-files-path
+        name="external_files_root"
+        path="." />
+
+    <!-- getExternalFilesDir() /storage/sdcard0/Android/data/packagename-->
+    <external-cache-path
+        name="external_cache-root"
+        path="." />
+</paths>
