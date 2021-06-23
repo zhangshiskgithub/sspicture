@@ -67,7 +67,7 @@ public class DisplayPictureActivity extends Activity implements ViewPager.OnPage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);// 锁定竖屏
+        setRequestedOrientation(getScreenOrientation());// 锁定竖屏
         requestWindowFeature(Window.FEATURE_NO_TITLE); // 没有标题栏
         Intent intent = getIntent();
         displayIndex = intent.getIntExtra(EXTRA_DISPLAY_INDEX, 0);
@@ -86,12 +86,17 @@ public class DisplayPictureActivity extends Activity implements ViewPager.OnPage
         locgic();
     }
 
+    protected int getScreenOrientation(){
+        return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    }
+
+
     /**
      * Author: zsq <br>
      * Date: 15/11/4 17:47<br>
      * 查找控件
      */
-    private void findViewById() {
+    protected void findViewById() {
         vp_display_picture = (HackyViewPager) findViewById(R.id.vp_display_picture);
         pagerAdapter = new SamplePagerAdapter();
         findViewById(R.id.ll_display_pic_title_left).setOnClickListener(new View.OnClickListener() {
@@ -107,9 +112,7 @@ public class DisplayPictureActivity extends Activity implements ViewPager.OnPage
      * Date: 15/11/4 17:47<br>
      * 初始化布局文件
      */
-    private void initLayout() {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);// 锁定竖屏
-        requestWindowFeature(Window.FEATURE_NO_TITLE); // 没有标题栏
+    protected void initLayout() {
         mContext = this;
         setContentView(R.layout.activity_display_picture);
         screenHeight = getMobileHeight();
@@ -121,7 +124,7 @@ public class DisplayPictureActivity extends Activity implements ViewPager.OnPage
      * Date: 15/11/4 17:47<br>
      * 设置监听
      */
-    private void setListener() {
+    protected void setListener() {
         vp_display_picture.setAdapter(pagerAdapter);
         vp_display_picture.addOnPageChangeListener(this);
     }
@@ -131,7 +134,7 @@ public class DisplayPictureActivity extends Activity implements ViewPager.OnPage
      * Date: 15/11/4 17:47<br>
      * 页面逻辑
      */
-    private void locgic() {
+    protected void locgic() {
         //跳转到指定的页面开始查看
         vp_display_picture.setCurrentItem(displayIndex);
     }
