@@ -26,7 +26,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "pub.devrel:easypermissions:${libs.easypermissions}"
-    implementation "com.commit451:PhotoView:${libs.PhotoView}"
+//    implementation "com.github.chrisbanes:PhotoView:${libs.PhotoView}"
     implementation "com.android.support:appcompat-v7:${libs.supportVersion}"
     implementation "com.android.support:design:${libs.supportVersion}"
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {

@@ -13,13 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.cpx.sspicture.photoview.IPhotoView;
+import com.cpx.sspicture.photoview.PhotoView;
+import com.cpx.sspicture.photoview.PhotoViewAttacher;
 import com.cpx.sspicture.utils.SelectPictureConfig;
 
 import java.util.List;
 
-import uk.co.senab.photoview.IPhotoView;
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * desc: 查看图片的页面<br>开启时需要传入查看图片的列表及从第几张开始查看,默认从第一张查看<br/>
@@ -147,8 +147,9 @@ public class DisplayPictureActivity extends Activity implements ViewPager.OnPage
     @Override
     public void onPageSelected(int position) {
         PhotoView photoView = (PhotoView) vp_display_picture.getChildAt(position);
-        if (photoView != null)
+        if (photoView != null) {
             photoView.setScale(IPhotoView.DEFAULT_MIN_SCALE);
+        }
     }
 
     @Override
@@ -190,7 +191,7 @@ public class DisplayPictureActivity extends Activity implements ViewPager.OnPage
 
         @Override
         public View instantiateItem(ViewGroup container, int position) {
-            PhotoView photoView = new PhotoView(container.getContext());
+            final PhotoView photoView = new PhotoView(container.getContext());
             String path = imageList.get(position);
             //fixed 图片过长的情况下无法放大看清
             SelectPictureConfig.imageLoader.displayBigImage(mContext, path, photoView, new BigImageLoadCallback() {
