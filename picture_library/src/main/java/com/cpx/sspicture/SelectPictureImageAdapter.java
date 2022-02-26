@@ -15,7 +15,7 @@ import com.cpx.sspicture.utils.SelectPictureConfig;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +29,7 @@ public class SelectPictureImageAdapter extends RecyclerView.Adapter<SelectPictur
     /**
      * 选中的图片
      */
-    private Set<String> selectList = new HashSet<>();
+    private Set<String> selectList = new LinkedHashSet<>();
     /**
      * 图片列表
      */
