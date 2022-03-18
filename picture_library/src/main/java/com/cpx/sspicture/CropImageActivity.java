@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
@@ -37,6 +38,8 @@ public class CropImageActivity extends AppCompatActivity {
     private TextView tv_title_right;
     private CropImageView clip_image_view;
     public static final String EXTRA_IMG = "image";
+    public static final String EXTRA_WIDTH = "width";
+    public static final String EXTRA_HEIGHT = "height";
     // 大图被设置之前的缩放比例
     private int mSampleSize;
     private int mSourceWidth;
@@ -51,9 +54,11 @@ public class CropImageActivity extends AppCompatActivity {
      * @param fromPath      图片地址
      * @param requestCode
      */
-    public static void startPage(Activity activity, String fromPath,int requestCode){
+    public static void startPage(Activity activity, String fromPath,int width,int height,int requestCode){
         Intent intent = new Intent(activity,CropImageActivity.class);
         intent.putExtra(EXTRA_IMG,fromPath);
+        intent.putExtra(EXTRA_HEIGHT,height);
+        intent.putExtra(EXTRA_WIDTH,width);
         activity.startActivityForResult(intent,requestCode);
     }
 
@@ -77,6 +82,8 @@ public class CropImageActivity extends AppCompatActivity {
         ll_back = (LinearLayout) findViewById(R.id.ll_back);
         tv_title_right = (TextView) findViewById(R.id.tv_title_right);
         clip_image_view = (CropImageView) findViewById(R.id.clip_image_view);
+        clip_image_view.setAspect(getCropWidth(),getCropHeight());
+        clip_image_view.setmClipPadding(getMobileWidth()/6);
     }
 
     private void setListener() {
@@ -127,6 +134,13 @@ public class CropImageActivity extends AppCompatActivity {
     private String getFromUri(){
         return getIntent().getStringExtra(EXTRA_IMG);
     }
+
+    private int getCropWidth(){
+        return getIntent().getIntExtra(EXTRA_WIDTH,250);
+    }
+    private int getCropHeight(){
+        return getIntent().getIntExtra(EXTRA_HEIGHT,330);
+    }
     private void locgic() {
         setImageAndClipParams();
     }
@@ -170,6 +184,12 @@ public class CropImageActivity extends AppCompatActivity {
                 clip_image_view.setImageBitmap(target);
             }
         });
+    }
+    public int getMobileWidth() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        return width;
     }
     /**
      * 计算最好的采样大小。

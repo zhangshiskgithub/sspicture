@@ -34,7 +34,7 @@ public class CropImageView extends android.support.v7.widget.AppCompatImageView 
     private int mAspectX;
     private int mAspectY;
     private String mTipText;
-    private final int mClipPadding;
+    private  int mClipPadding;
 
     private float mScaleMax = 4.0f;
     private float mScaleMin = 2.0f;
@@ -334,9 +334,15 @@ public class CropImageView extends android.support.v7.widget.AppCompatImageView 
         }
     }
 
+
+
     public void setAspect(int aspectX, int aspectY) {
         mAspectX = aspectX;
         mAspectY = aspectY;
+    }
+
+    public void setmClipPadding(int mClipPadding) {
+        this.mClipPadding = mClipPadding;
     }
 
     public void setTip(String tip) {

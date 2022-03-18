@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cpx.sspicture.bean.ImageBucket;
+import com.cpx.sspicture.bean.ImageItem;
 import com.cpx.sspicture.utils.ImageAlbumHelper;
 import com.cpx.sspicture.utils.SelectPictureConfig;
 
@@ -73,10 +74,15 @@ public class FolderAdapter extends BaseAdapter {
         int size = imageBucket.imageList.size();
         if(size == 0){
             SelectPictureConfig.imageLoader.displayImage(parent.getContext(),"",holder.iv_folder_image);
-        }else if(size >2){
-            SelectPictureConfig.imageLoader.displayImage(parent.getContext(),imageBucket.imageList.get(1),holder.iv_folder_image);
         }else{
-            SelectPictureConfig.imageLoader.displayImage(parent.getContext(),imageBucket.imageList.get(0),holder.iv_folder_image);
+            ImageItem imageItem = imageBucket.imageList.get(0);
+            String path = "";
+            if (imageItem.type == ImageItem.TYPE_VIDEO) {
+                path = imageItem.thumbnailPath;
+            } else {
+                path = imageItem.path;
+            }
+            SelectPictureConfig.imageLoader.displayImage(parent.getContext(), path, holder.iv_folder_image);
         }
 
         return convertView;
