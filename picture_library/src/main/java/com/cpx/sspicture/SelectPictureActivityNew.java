@@ -39,6 +39,7 @@ public class SelectPictureActivityNew extends FragmentActivity implements View.O
      * 设定最多能选择几张图片的intent key;
      */
     public static final String EXTRA_KEY_MAX_SELECT = "maxSelectNum";
+    public static final String EXTRA_KEY_TYPE = "type";
     /**
      * 开启activity时带数据的key,已选择图片列表
      */
@@ -89,12 +90,13 @@ public class SelectPictureActivityNew extends FragmentActivity implements View.O
      * @param maxSelect     最大选中数
      * @param requestCode
      */
-    public static void startPage(Activity activity,ArrayList<String> selectImgs,int maxSelect,int requestCode){
+    public static void startPage(Activity activity,ArrayList<String> selectImgs,int maxSelect,int requestCode,int type){
         Intent intent = new Intent(activity,SelectPictureActivityNew.class);
         if(selectImgs != null) {
             intent.putStringArrayListExtra(EXTRA_IMG_LIST,selectImgs);
         }
         intent.putExtra(EXTRA_KEY_MAX_SELECT,maxSelect);
+        intent.putExtra(EXTRA_KEY_TYPE,type);
         activity.startActivityForResult(intent,requestCode);
     }
 
@@ -136,7 +138,7 @@ public class SelectPictureActivityNew extends FragmentActivity implements View.O
 
         folderAdapter = new FolderAdapter();
         helper = ImageAlbumHelper.getHelper();
-        helper.init(this);
+        helper.init(this,getIntentType());
         setTitleRightStr();
         initBuck();
     }
@@ -189,6 +191,9 @@ public class SelectPictureActivityNew extends FragmentActivity implements View.O
         return getIntent().getIntExtra(EXTRA_KEY_MAX_SELECT, DEFAULT_MAX_SELECT_NUM);
     }
 
+    private int getIntentType(){
+        return getIntent().getIntExtra(EXTRA_KEY_TYPE, SelectPictureDispatchActivity.BUCKET_TYPE_IMAGE);
+    }
     /**
      * Author: zsq <br>
      * Date: 15/11/4 13:18<br>

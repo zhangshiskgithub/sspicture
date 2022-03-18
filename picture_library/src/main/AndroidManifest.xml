@@ -9,9 +9,6 @@
                  android:label="@string/app_name"
                  android:supportsRtl="true">
         <activity
-            android:name=".SelectPictureActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".SelectPictureActivityNew"
             android:screenOrientation="portrait"/>
         <activity

@@ -4,9 +4,12 @@ package com.cpx.sspicture.utils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 
+import com.cpx.sspicture.SelectPictureDispatchActivity;
 import com.cpx.sspicture.bean.ImageBucket;
+import com.cpx.sspicture.bean.ImageItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +35,7 @@ public class ImageAlbumHelper {
     /**
      * 手机中所有图片
      */
-    List<String> imageList = new ArrayList<>();
+    List<ImageItem> imageList = new ArrayList<>();
     /**
      * 全部图片相册的bucketID
      */
@@ -41,6 +44,8 @@ public class ImageAlbumHelper {
      * 全部图片相册的bucketID
      */
     public static final String ALL_BUCKET_LIST_NAME = "全部";
+
+    private int type = SelectPictureDispatchActivity.BUCKET_TYPE_IMAGE;
 
 
     private static ImageAlbumHelper instance;
@@ -60,11 +65,12 @@ public class ImageAlbumHelper {
      *
      * @param context
      */
-    public void init(Context context) {
+    public void init(Context context,int type) {
         if (this.context == null) {
             this.context = context;
             cr = context.getContentResolver();
         }
+        this.type = type;
     }
 
     public void destory(){
@@ -120,7 +126,7 @@ public class ImageAlbumHelper {
                 if (bucket == null) {
                     bucket = new ImageBucket();
                     bucketList.put(SelectPictureConfig.MERGE_SAME_NAME_BUCKET ? bucketName : bucketId, bucket);
-                    bucket.imageList = new ArrayList<String>();
+                    bucket.imageList = new ArrayList<ImageItem>();
                     bucket.bucketName = bucketName;
                     bucket.bucketId = bucketId;
                 }
@@ -128,9 +134,8 @@ public class ImageAlbumHelper {
                 /**
                  * 向相册中添加
                  */
-                bucket.imageList.add(path);
-                //向所有图片列表中添加
-                imageList.add(path);
+                bucket.imageList.add(new ImageItem(path,path,ImageItem.TYPE_IMAGE));
+                imageList.add(new ImageItem(path,path,ImageItem.TYPE_IMAGE));
             } while (cur.moveToNext());
         }
 
@@ -145,6 +150,47 @@ public class ImageAlbumHelper {
         long endTime = System.currentTimeMillis();
 //        Log.d(TAG, "use time: " + (endTime - startTime) + " ms");
     }
+    /**
+     * 得到图片集
+     */
+    void buildVideosBucketList() {
+        // 构造相册索引
+        String columns[] = new String[]{ MediaStore.Video.Media._ID,MediaStore.Video.Media.DATA,MediaStore.Video.Media.SIZE,MediaStore.Video.Media.BUCKET_DISPLAY_NAME,MediaStore.Video.Media.BUCKET_ID};
+        // 得到一个游标
+        Cursor cur = cr.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, columns, null, null, Media.DATE_ADDED + " desc");
+        if (cur.moveToFirst()) {
+            // 获取指定列的索引
+            // 获取图片总数
+            int totalNum = cur.getCount();
+
+            do {
+                //遍历所有图片,添加入相应的bucket中
+                int videoId = cur.getInt(cur.getColumnIndex(MediaStore.Video.Media._ID));
+                String path = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+                String size = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
+                String bucketName = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME));
+                String bucketId = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_ID));
+
+                //如果配置合并相同名称相册,则用bucketName做key,否则用id做key
+
+                ImageBucket bucket = SelectPictureConfig.MERGE_SAME_NAME_BUCKET ? bucketList.get(bucketName) : bucketList.get(bucketId);
+                if (bucket == null) {
+                    bucket = new ImageBucket();
+                    bucketList.put(SelectPictureConfig.MERGE_SAME_NAME_BUCKET ? bucketName : bucketId, bucket);
+                    bucket.imageList = new ArrayList<ImageItem>();
+                    bucket.bucketName = bucketName;
+                    bucket.bucketId = bucketId;
+                }
+                bucket.count++;
+                /**
+                 * 向相册中添加
+                 */
+                bucket.imageList.add(new ImageItem(path,path,ImageItem.TYPE_VIDEO));
+                imageList.add(new ImageItem(path,path,ImageItem.TYPE_VIDEO));
+            } while (cur.moveToNext());
+        }
+        hasBuildImagesBucketList = true;
+    }
 
     /**
      * 得到图片集
@@ -157,7 +203,11 @@ public class ImageAlbumHelper {
             //清空所有图片数据
             imageList.clear();
             bucketList.clear();
-            buildImagesBucketList();
+            if(type == SelectPictureDispatchActivity.BUCKET_TYPE_VIDEO){
+                buildVideosBucketList();
+            }else {
+                buildImagesBucketList();
+            }
         }
         //添加所有
         ImageBucket ib = new ImageBucket();
@@ -182,7 +232,7 @@ public class ImageAlbumHelper {
      * @param refresh 是否刷新数据
      * @return 手机中所有的图片
      */
-    public List<String> getAllImageItem(boolean refresh) {
+    public List<ImageItem> getAllImageItem(boolean refresh) {
         if (refresh || (!refresh && !hasBuildImagesBucketList)) {
             //清空所有图片数据
             imageList.clear();

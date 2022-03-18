@@ -32,6 +32,7 @@ public class SelectPictureDispatchActivity extends AppCompatActivity implements 
      * 设定最多能选择几张图片的intent key;
      */
     public static final String EXTRA_KEY_MAX_SELECT = "maxSelectNum";
+    public static final String EXTRA_KEY_SELECT_TYPE = "selectType";
     /**
      * 开启activity时带数据的key,已选择图片列表
      */
@@ -44,6 +45,14 @@ public class SelectPictureDispatchActivity extends AppCompatActivity implements 
      * 相册选择
      */
     public static final String ACTION_BUCKET = "ACTION_BUCKET";
+    /**
+     * 相册选择图片
+     */
+    public static final int BUCKET_TYPE_IMAGE = 0;
+    /**
+     * 相册选择视频
+     */
+    public static final int BUCKET_TYPE_VIDEO = 1;
     /**
      * 默认能够最多选取图片的张数
      */
@@ -108,8 +117,9 @@ public class SelectPictureDispatchActivity extends AppCompatActivity implements 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (capturePicUri != null)
+        if (capturePicUri != null){
             outState.putString("cameraUri", capturePicUri.getPath());
+        }
     }
 
     @Override
@@ -231,7 +241,9 @@ public class SelectPictureDispatchActivity extends AppCompatActivity implements 
     }
 
     private void selectBucketImage(){
-        SelectPictureActivityNew.startPage(this,getSelectedImageList(),getMaxSelectNum(),BUCKET_REQUEST_CODE);
+        SelectPictureActivityNew.startPage(this,getSelectedImageList(),getMaxSelectNum(),BUCKET_REQUEST_CODE,getBucketType());
     }
-
+    private int getBucketType(){
+        return getIntent().getIntExtra(EXTRA_KEY_SELECT_TYPE, BUCKET_TYPE_IMAGE);
+    }
 }

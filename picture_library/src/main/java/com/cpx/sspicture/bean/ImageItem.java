@@ -4,25 +4,44 @@ import java.io.Serializable;
 
 /**
  * 一个图片对象
- * 
+ *
  * @author zsq
- * 
+ *
  */
 public class ImageItem implements Serializable {
-	public String imageId = "";// 图片id
-	// public String thumbnailPath;
-	public String imagePath = "";// 图片真实路径
+	public static int TYPE_IMAGE = 0;
+	public static int TYPE_VIDEO = 1;
+	/**
+	 * 缩略图路径
+	 */
+	public String thumbnailPath;
+	/**
+	 * 真实路径
+	 */
+	public String path = "";
+
+	public int type =TYPE_IMAGE;
+
+	public ImageItem() {
+	}
+
+	public ImageItem(String path,String thumbnailPath,int type) {
+		this.path = path;
+		this.thumbnailPath = thumbnailPath;
+		this.type = type;
+	}
 
 	public String getFileName() {
-		int separatorIndex = imagePath.lastIndexOf(String.valueOf(System.getProperty("file.separator", "/").charAt(0)));
-		return (separatorIndex < 0) ? imagePath : imagePath.substring(separatorIndex + 1, imagePath.length());
+		int separatorIndex = path.lastIndexOf(String.valueOf(System.getProperty("file.separator", "/").charAt(0)));
+		return (separatorIndex < 0) ? path : path.substring(separatorIndex + 1, path.length());
 	}
 
 	@Override
 	public String toString() {
 		return "ImageItem{" +
-				"imageId='" + imageId + '\'' +
-				", imagePath='" + imagePath + '\'' +
+				"thumbnailPath='" + thumbnailPath + '\'' +
+				", path='" + path + '\'' +
+				", type=" + type +
 				'}';
 	}
 }
