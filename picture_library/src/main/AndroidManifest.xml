@@ -18,6 +18,9 @@
             android:name=".DisplayPictureActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".VideoViewActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".CropImageActivity"
             android:screenOrientation="portrait"/>
         <!-- FileProvider
