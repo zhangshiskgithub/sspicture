@@ -31,7 +31,7 @@ public class SelectPictureImageAdapter extends RecyclerView.Adapter<SelectPictur
     /**
      * 选中的图片
      */
-    private Set<String> selectList = new HashSet<>();
+    private Set<String> selectList = new LinkedHashSet<>();
     /**
      * 图片列表
      */
