@@ -17,9 +17,9 @@ import com.cpx.sspicture.utils.SelectPictureConfig;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * desc: <br>
@@ -31,7 +31,7 @@ public class SelectPictureImageAdapter extends RecyclerView.Adapter<SelectPictur
     /**
      * 选中的图片
      */
-    private Set<String> selectList = new LinkedHashSet<>();
+    private Map<String,ImageItem> selectList = new LinkedHashMap<>();
     /**
      * 图片列表
      */
@@ -50,8 +50,8 @@ public class SelectPictureImageAdapter extends RecyclerView.Adapter<SelectPictur
         this.maxSelect = maxSelect;
     }
 
-    public List<String> getSelectList() {
-        return new ArrayList<>(selectList);
+    public List<ImageItem> getSelectList() {
+        return new ArrayList<>(selectList.values());
     }
 
     /**
@@ -61,7 +61,12 @@ public class SelectPictureImageAdapter extends RecyclerView.Adapter<SelectPictur
      */
     public void setSelectList(List<String> list) {
         if (list != null) {
-            selectList.addAll(list);
+            for (String path : list) {
+                String name = "";
+                int separatorIndex = path.lastIndexOf(String.valueOf(System.getProperty("file.separator", "/").charAt(0)));
+                name =  (separatorIndex < 0) ? path : path.substring(separatorIndex + 1, path.length());
+                selectList.put(path,new ImageItem(name,path,path,imgList.get(0).type));
+            }
         }
     }
 
@@ -114,7 +119,7 @@ public class SelectPictureImageAdapter extends RecyclerView.Adapter<SelectPictur
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         ImageItem image = imgList.get(position);
-        if (selectList.contains(image.path)) {
+        if (selectList.containsKey(image.path)) {
             holder.iv_select_status.setImageResource(R.mipmap.image_grad_checkbox_select);
         } else {
             holder.iv_select_status.setImageResource(R.mipmap.image_grad_checkbox_normal);
@@ -140,11 +145,11 @@ public class SelectPictureImageAdapter extends RecyclerView.Adapter<SelectPictur
 
     private void clickSelectStatus(int position) {
         ImageItem img = imgList.get(position);
-        if (selectList.contains(img.path)) {
+        if (selectList.containsKey(img.path)) {
             selectList.remove(img.path);
         } else {
             if (selectList.size() < maxSelect) {
-                selectList.add(img.path);
+                selectList.put(img.path,img);
             } else {
                 if (img.type == ImageItem.TYPE_VIDEO) {
                     Toast.makeText(mContext, "最多只能选择" + maxSelect + "个视频!", Toast.LENGTH_SHORT).show();
