@@ -1,6 +1,7 @@
 package com.cpx.sspicture;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,7 +14,11 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.widget.Toast;
 
+import com.cpx.sspicture.bean.ImageItem;
+
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -152,12 +157,14 @@ public class SelectPictureDispatchActivity extends AppCompatActivity implements 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             List<String> checkedImageList = new ArrayList<>();
-            switch (requestCode){
+            switch (requestCode) {
                 case CAMERA_REQUEST_CODE:
+                    checkedImageList.addAll(getSelectedImageList());
                     checkedImageList.add(capturePicUri.getPath());
                     break;
                 case BUCKET_REQUEST_CODE:
-                    checkedImageList = (List<String>) data.getSerializableExtra(SelectPictureActivityNew.EXTRA_IMG_LIST);
+                    List<ImageItem> list = (List<ImageItem>) data.getSerializableExtra(SelectPictureActivityNew.EXTRA_IMG_LIST);
+                    checkedImageList.addAll(processResult(list));
                     break;
             }
             Intent i = new Intent();
@@ -171,6 +178,36 @@ public class SelectPictureDispatchActivity extends AppCompatActivity implements 
         }
     }
 
+    private List<String> processResult(List<ImageItem> list){
+        List<String> result = new ArrayList<>();
+        File selectPictureCacheDir = CacheConfigure.getSelectPictureBitmapCacheDir(this);
+        ContentResolver contentResolver = getContentResolver();
+        for (ImageItem imageItem : list) {
+            String path = imageItem.path;
+            if(path.startsWith("content")){
+                try {
+                    File file = new File(selectPictureCacheDir, imageItem.name);
+                    InputStream inputStream = contentResolver.openInputStream(Uri.parse(path));
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    byte[] buffer = new byte[1024]; // 创建缓冲区
+                    int length;
+
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        fileOutputStream.write(buffer, 0, length);
+                    }
+                    fileOutputStream.close();
+                    inputStream.close();
+                    result.add(file.getAbsolutePath());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else {
+                result.add(path);
+            }
+
+        }
+        return result;
+    }
     /**
      * 检查照相权限
      *

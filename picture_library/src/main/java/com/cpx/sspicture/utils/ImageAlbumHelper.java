@@ -2,8 +2,10 @@ package com.cpx.sspicture.utils;
 
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 
@@ -108,9 +110,12 @@ public class ImageAlbumHelper {
 
             do {
                 //遍历所有图片,添加入相应的bucket中
-                String _id = cur.getString(photoIDIndex);
+                long _id = cur.getLong(photoIDIndex);
                 String name = cur.getString(photoNameIndex);
                 String path = cur.getString(photoPathIndex);
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                    path = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, _id).toString();
+                }
                 String title = cur.getString(photoTitleIndex);
                 String size = cur.getString(photoSizeIndex);
                 String bucketName = cur.getString(bucketDisplayNameIndex);
@@ -134,8 +139,8 @@ public class ImageAlbumHelper {
                 /**
                  * 向相册中添加
                  */
-                bucket.imageList.add(new ImageItem(path,path,ImageItem.TYPE_IMAGE));
-                imageList.add(new ImageItem(path,path,ImageItem.TYPE_IMAGE));
+                bucket.imageList.add(new ImageItem(name,path,path,ImageItem.TYPE_IMAGE));
+                imageList.add(new ImageItem(name,path,path,ImageItem.TYPE_IMAGE));
             } while (cur.moveToNext());
         }
 
@@ -166,7 +171,11 @@ public class ImageAlbumHelper {
             do {
                 //遍历所有图片,添加入相应的bucket中
                 int videoId = cur.getInt(cur.getColumnIndex(MediaStore.Video.Media._ID));
+                String name = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME));
                 String path = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                    path = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, videoId).toString();
+                }
                 String size = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
                 String bucketName = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME));
                 String bucketId = cur.getString(cur.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_ID));
@@ -185,8 +194,8 @@ public class ImageAlbumHelper {
                 /**
                  * 向相册中添加
                  */
-                bucket.imageList.add(new ImageItem(path,path,ImageItem.TYPE_VIDEO));
-                imageList.add(new ImageItem(path,path,ImageItem.TYPE_VIDEO));
+                bucket.imageList.add(new ImageItem(name,path,path,ImageItem.TYPE_VIDEO));
+                imageList.add(new ImageItem(name,path,path,ImageItem.TYPE_VIDEO));
             } while (cur.moveToNext());
         }
         hasBuildImagesBucketList = true;

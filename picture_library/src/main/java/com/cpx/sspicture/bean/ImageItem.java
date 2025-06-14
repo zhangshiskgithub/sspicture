@@ -20,12 +20,14 @@ public class ImageItem implements Serializable {
 	 */
 	public String path = "";
 
+	public String name = "";
 	public int type =TYPE_IMAGE;
 
 	public ImageItem() {
 	}
 
-	public ImageItem(String path,String thumbnailPath,int type) {
+	public ImageItem(String name,String path,String thumbnailPath,int type) {
+		this.name = name;
 		this.path = path;
 		this.thumbnailPath = thumbnailPath;
 		this.type = type;

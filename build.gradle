@@ -29,10 +29,10 @@ task clean(type: Delete) {
 ext {
     //版本控制
     configuration = [
-            compileSdkVersion: 28,
+            compileSdkVersion: 30,
             buildToolsVersion: "28.0.3",
             minSdk           : 16,
-            targetSdk        : 28,
+            targetSdk        : 30,
             versionCode      : 1,
             versionName      : "1.0.0"
     ]
