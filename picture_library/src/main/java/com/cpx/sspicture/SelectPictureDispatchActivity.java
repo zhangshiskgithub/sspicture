@@ -159,7 +159,7 @@ public class SelectPictureDispatchActivity extends AppCompatActivity implements 
             List<String> checkedImageList = new ArrayList<>();
             switch (requestCode) {
                 case CAMERA_REQUEST_CODE:
-                    checkedImageList.addAll(getSelectedImageList());
+//                    checkedImageList.addAll(getSelectedImageList());
                     checkedImageList.add(capturePicUri.getPath());
                     break;
                 case BUCKET_REQUEST_CODE:
