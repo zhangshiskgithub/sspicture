@@ -56,12 +56,7 @@ public class CropImageActivity extends AppCompatActivity {
      * @param requestCode
      */
     public static void startPage(Activity activity, String fromPath,int width,int height,int requestCode){
-        Intent intent = new Intent(activity,CropImageActivity.class);
-        intent.putExtra(EXTRA_IMG,fromPath);
-        intent.putExtra(EXTRA_HEIGHT,height);
-        intent.putExtra(EXTRA_WIDTH,width);
-        activity.startActivityForResult(intent,requestCode);
-        startPage(activity, fromPath, width, height,0.2f, requestCode);
+        startPage(activity, fromPath, width, height,0.1f, requestCode);
     }
 
     /**
