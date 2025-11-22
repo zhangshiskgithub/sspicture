@@ -40,6 +40,7 @@ public class CropImageActivity extends AppCompatActivity {
     public static final String EXTRA_IMG = "image";
     public static final String EXTRA_WIDTH = "width";
     public static final String EXTRA_HEIGHT = "height";
+    public static final String EXTRA_PADDING_SCALE = "paddingScale";
     // 大图被设置之前的缩放比例
     private int mSampleSize;
     private int mSourceWidth;
@@ -59,6 +60,22 @@ public class CropImageActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_IMG,fromPath);
         intent.putExtra(EXTRA_HEIGHT,height);
         intent.putExtra(EXTRA_WIDTH,width);
+        activity.startActivityForResult(intent,requestCode);
+        startPage(activity, fromPath, width, height,0.2f, requestCode);
+    }
+
+    /**
+     * 开启页面
+     * @param activity
+     * @param fromPath      图片地址
+     * @param requestCode
+     */
+    public static void startPage(Activity activity, String fromPath,int width,int height,float paddingScale, int requestCode){
+        Intent intent = new Intent(activity,CropImageActivity.class);
+        intent.putExtra(EXTRA_IMG,fromPath);
+        intent.putExtra(EXTRA_HEIGHT,height);
+        intent.putExtra(EXTRA_WIDTH,width);
+        intent.putExtra(EXTRA_PADDING_SCALE,paddingScale);
         activity.startActivityForResult(intent,requestCode);
     }
 
@@ -83,7 +100,7 @@ public class CropImageActivity extends AppCompatActivity {
         tv_title_right = (TextView) findViewById(R.id.tv_title_right);
         clip_image_view = (CropImageView) findViewById(R.id.clip_image_view);
         clip_image_view.setAspect(getCropWidth(),getCropHeight());
-        clip_image_view.setmClipPadding(getMobileWidth()/6);
+        clip_image_view.setmClipPadding((int) (getMobileWidth()*getPaddingScale()));
     }
 
     private void setListener() {
@@ -140,6 +157,9 @@ public class CropImageActivity extends AppCompatActivity {
     }
     private int getCropHeight(){
         return getIntent().getIntExtra(EXTRA_HEIGHT,330);
+    }
+    private float getPaddingScale(){
+        return getIntent().getFloatExtra(EXTRA_PADDING_SCALE,0.2f);
     }
     private void locgic() {
         setImageAndClipParams();
