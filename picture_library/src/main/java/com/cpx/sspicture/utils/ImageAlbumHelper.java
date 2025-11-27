@@ -160,7 +160,7 @@ public class ImageAlbumHelper {
      */
     void buildVideosBucketList() {
         // 构造相册索引
-        String columns[] = new String[]{ MediaStore.Video.Media._ID,MediaStore.Video.Media.DATA,MediaStore.Video.Media.SIZE,MediaStore.Video.Media.BUCKET_DISPLAY_NAME,MediaStore.Video.Media.BUCKET_ID};
+        String columns[] = new String[]{ MediaStore.Video.Media._ID,MediaStore.Video.Media.DATA,MediaStore.Video.Media.SIZE,MediaStore.Video.Media.DISPLAY_NAME,MediaStore.Video.Media.BUCKET_DISPLAY_NAME,MediaStore.Video.Media.BUCKET_ID};
         // 得到一个游标
         Cursor cur = cr.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, columns, null, null, Media.DATE_ADDED + " desc");
         if (cur.moveToFirst()) {
